@@ -43,8 +43,8 @@ O modelo CRISP-DM é uma abordagem sistemática e estruturada para a mineração
 | VUF_QTBOLETO | Quantidade de Boletos |
 | VUF_QTPRODUTO | Quantidade de Produtos |
 | VUF_VLRBRUTOVENDA | Valor Bruto da Venda |
-| VUF_VLRDESCONTO | Valor Bruto do Desconto |
-| VUF_VLRLIQFINAL | Valor Díquido da Venda |
+| VUF_VLRDESCONTO | Valor do Desconto |
+| VUF_VLRLIQFINAL | Valor Líquido da Venda |
 | VUF_VLRTROCA | O Valor da Troca, refere-se à situação em que, caso uma pessoa devolva um produto, ela recebe um desconto no valor bruto. |
 | CLV_BANCO | Código do Cliente |
 
