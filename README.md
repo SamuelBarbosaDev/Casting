@@ -7,6 +7,7 @@
     - [Metodologia Aplicada:](#metodologia-aplicada)
   - [Entendimento do Negócio:](#entendimento-do-negócio)
   - [Entendimento dos Dados:](#entendimento-dos-dados)
+    - [Variáveis:](#variáveis)
   - [Preparação dos Dados:](#preparação-dos-dados)
   - [Modelagem:](#modelagem)
   - [Avaliação:](#avaliação)
@@ -29,6 +30,52 @@ O modelo CRISP-DM é uma abordagem sistemática e estruturada para a mineração
 
 
 ## Entendimento dos Dados:
+### Variáveis:
+| Coluna           | Descrição                                             |
+| ---------------- | ----------------------------------------------------- |
+| VUF_CODIGO | Código da Venda |
+| VUF_CODIGO_BOLETO | Código do Boleto |
+| UND_CODIGO | Código da Unidade, ou seja, o local onde foi vendido. |
+| FUN_CODIGO | Código do Funcionário |
+| VUF_DT | Data da Transação |
+| PRO_CODIGO | Código do Produto, ou seja, código do produto vendido. |
+| CAT_CODIGO | Código da Categoria, ou seja, código da categoria do produto vendido. |
+| VUF_QTBOLETO | Quantidade de Boletos |
+| VUF_QTPRODUTO | Quantidade de Produtos |
+| VUF_VLRBRUTOVENDA | Valor Bruto da Venda |
+| VUF_VLRDESCONTO | Valor Bruto do Desconto |
+| VUF_VLRLIQFINAL | Valor Díquido da Venda |
+| VUF_VLRTROCA | O Valor da Troca, refere-se à situação em que, caso uma pessoa devolva um produto, ela recebe um desconto no valor bruto. |
+| CLV_BANCO | Código do Cliente |
+
+***OBS:*** *Na base de dados, podem existir diversas `Vendas` distintas no `mesmo Boleto`. Além disso, internamente, eles possuem uma métrica que representa o `número de produtos` por `Boleto`, e essa métrica é obtida por meio da agregação da coluna `VUF_CODIGO_BOLETO` com base no `VUF_QTBOLETO`.*
+
+*Exemplo:*
+
+```python
+  (
+    df
+    .groupby('VUF_CODIGO_BOLETO')
+    .agg({'VUF_QTBOLETO':'sum'})
+  )
+```
+
+*Output:*
+
+| VUF_QTBOLETO                                       | VUF_CODIGO_BOLETO |
+|---------------------------------------------------|-------------------|
+| 1                                                 | 4                 |
+| 10                                                | 5                 |
+| 11                                                | 4                 |
+| 12                                                | 4                 |
+| 13                                                | 5                 |
+| ...                                               | ...               |
+| 152461-22-f8ec40f8-a41d-4361-beda-abfcdb8aec73    | 1                 |
+| 152461-82-61b1a049-5a8a-4666-8fd4-f54ce0a1d595    | 1                 |
+| 152462-22-264a21e3-4c9d-4d55-9509-5f38b27c715a    | 1                 |
+| 152462-82-4dcf1591-5378-45a0-991a-d29b3e6209a3    | 1                 |
+| 152463-22-df7662df-b21d-4edb-ae0b-a227c2c53943    | 1                 |
+
 
 
 ## Preparação dos Dados:
