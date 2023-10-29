@@ -9,6 +9,7 @@
   - [Entendimento dos Dados:](#entendimento-dos-dados)
     - [Variáveis:](#variáveis)
   - [Preparação dos Dados:](#preparação-dos-dados)
+    - [Segmentando o DataFrame por clientes:](#segmentando-o-dataframe-por-clientes)
   - [Modelagem:](#modelagem)
   - [Avaliação:](#avaliação)
   - [Implantação:](#implantação)
@@ -79,7 +80,12 @@ O modelo CRISP-DM é uma abordagem sistemática e estruturada para a mineração
 
 
 ## Preparação dos Dados:
-
+### Segmentando o DataFrame por clientes:
+```python
+for cliente in set(df['CLV_BANCO']):
+    temp = df[df.CLV_BANCO == cliente]
+    temp.to_csv(f'../data/dataset_{cliente}.csv', index=False)
+```
 
 ## Modelagem:
 
