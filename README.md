@@ -8,6 +8,12 @@
   - [Entendimento do Negócio:](#entendimento-do-negócio)
   - [Entendimento dos Dados:](#entendimento-dos-dados)
     - [Variáveis:](#variáveis)
+    - [DataFrame:](#dataframe)
+    - [Verificando as dimensões do dataframe:](#verificando-as-dimensões-do-dataframe)
+    - [Verificando os tipos:](#verificando-os-tipos)
+    - [Descrição das colunas do tipo `numérico`:](#descrição-das-colunas-do-tipo-numérico)
+    - [Descrição das colunas do tipo `object`:](#descrição-das-colunas-do-tipo-object)
+    - [Verificando os valores nulos:](#verificando-os-valores-nulos)
   - [Preparação dos Dados:](#preparação-dos-dados)
     - [Segmentando o DataFrame por clientes:](#segmentando-o-dataframe-por-clientes)
   - [Modelagem:](#modelagem)
@@ -64,7 +70,6 @@ A Solução Casting é uma empresa que presta serviços para outras empresas, e 
 ```
 
 *Output:*
-
 | VUF_QTBOLETO                                       | VUF_CODIGO_BOLETO |
 |---------------------------------------------------|-------------------|
 | 1                                                 | 4                 |
@@ -79,6 +84,121 @@ A Solução Casting é uma empresa que presta serviços para outras empresas, e 
 | 152462-82-4dcf1591-5378-45a0-991a-d29b3e6209a3    | 1                 |
 | 152463-22-df7662df-b21d-4edb-ae0b-a227c2c53943    | 1                 |
 
+### DataFrame:
+```python
+df.head(3)
+```
+
+*Output:*
+| VUF_CODIGO                            | VUF_CODIGO_BOLETO                     | UND_CODIGO | FUN_CODIGO                            | VUF_DT     | PRO_CODIGO                            | CAT_CODIGO                            | VUF_QTBOLETO | VUF_QTPRODUTO | VUF_VLRBRUTOVENDA | VUF_VLRDESCONTO | VUF_VLRLIQFINAL | VUF_VLRTROCA | CLV_BANCO    |
+|---------------------------------------|---------------------------------------|------------|---------------------------------------|------------|---------------------------------------|---------------------------------------|--------------|---------------|-------------------|-----------------|-----------------|-------------|--------------|
+| B28DDB4B-8A49-4658-8539-5DA3F20AA39F | 1000                                  | 1000       | D4758B39-E7EA-4D97-B6B1-6236CE2C05A2 | 2022-06-18 | BBEF56E1-66E0-47A6-95AC-5479DE79577B | 6768760F-758A-4B31-AE33-CEB127A956CB | 1            | 1.0           | 15.0              | 0.0             | 15.0            | 0.0         | CASTING_DB108 |
+| 8E22E8FC-65DC-44BA-AFFA-4D661108F0B4 | 1001                                  | 1001       | D4758B39-E7EA-4D97-B6B1-6236CE2C05A2 | 2022-06-18 | AF858E1C-9C72-4B63-AC51-A8185ECCCC35 | 0136ECF4-9F4D-4DBE-A78D-B2ED565CE60C | 1            | 1.0           | 32.0              | 0.0             | 32.0            | 0.0         | CASTING_DB108 |
+| E36DEDC5-78CB-4452-9E04-AD174E32747C | 1002                                  | 1002       | D4758B39-E7EA-4D97-B6B1-6236CE2C05A2 | 2022-06-20 | B0974005-D231-438C-A0C1-F6A211B00697 | 7B6AD9C1-F745-4137-B62D-4A67E865E781 | 1            | 1.0           | 15.0              | 0.0             | 15.0            | 0.0         | CASTING_DB108 |
+
+
+### Verificando as dimensões do dataframe:
+```python
+casting.verificando_as_dimensões_do_dataframe(
+    dataframe=df
+)
+```
+
+*Output:*
+```output
+Linhas: 65535 
+Colunas: 14
+```
+
+### Verificando os tipos:
+```python
+casting.verificando_tipos(
+    dataframe=df
+)
+```
+
+*Output:*
+| Campo            | Tipos    |
+|------------------|----------|
+| VUF_CODIGO       | object   |
+| VUF_CODIGO_BOLETO | object   |
+| UND_CODIGO       | object   |
+| FUN_CODIGO       | object   |
+| VUF_DT           | object   |
+| PRO_CODIGO       | object   |
+| CAT_CODIGO       | object   |
+| VUF_QTBOLETO     | int64    |
+| VUF_QTPRODUTO    | float64  |
+| VUF_VLRBRUTOVENDA | float64  |
+| VUF_VLRDESCONTO  | float64  |
+| VUF_VLRLIQFINAL  | float64  |
+| VUF_VLRTROCA     | float64  |
+| CLV_BANCO        | object   |
+
+
+### Descrição das colunas do tipo `numérico`:
+```python
+casting.descrição(
+    dataframe=df,
+    vertical=True
+)
+```
+
+*Output:*
+|           | count  |   mean |    std |    min |   10% |   15% |   25% |   50% |   75% |   85% |   95% |   99% |    max |
+|-----------|-------|--------|--------|--------|-------|-------|-------|-------|-------|-------|-------|-------|--------|
+| VUF_QTBOLETO      | 65535 |   0.47 |   0.50 |   0.00 |  0.00 |  0.00 |  0.00 |  0.00 |  0.00 |  1.00 |  1.0 |  1.00 |   1.0  |
+| VUF_QTPRODUTO     | 65535 |   1.00 |   3.39 |  -4.00 |  1.00 |  1.00 |  1.00 |  1.00 |  1.00 |  1.00 |  1.0 |  3.00 | 850.0  |
+| VUF_VLRBRUTOVENDA | 65535 | 355.83 | 782.00 | -15250.00 |  5.98 |  7.98 | 15.00 | 170.00 | 440.00 | 759.00 | 1499.0 | 3290.00 | 45900.0 |
+| VUF_VLRDESCONTO   | 65535 |  60.21 | 253.92 |  -8627.99 |  0.00 |  0.00 |  0.00 |  0.00 |  0.00 | 112.00 | 312.0 | 840.00 | 12450.0 |
+| VUF_VLRLIQFINAL   | 65535 | 295.62 | 619.81 |  -7326.00 |  5.00 |  6.98 | 13.98 | 144.00 | 359.98 | 640.00 | 1281.0 | 2719.66 | 45900.0 |
+| VUF_VLRTROCA      | 65535 |   0.00 |   0.00 |   0.00 |  0.00 |  0.00 |  0.00 |  0.00 |  0.00 |   0.00 |   0.0 |  0.00 |   0.0  |
+
+
+### Descrição das colunas do tipo `object`:
+```python
+casting.descrição_object(
+    dataframe=df,
+    vertical=True
+)
+```
+
+*Output:*
+| Campo             | Contagem | Único   | Top                                    | Frequência |
+|-------------------|----------|---------|----------------------------------------|------------|
+| VUF_CODIGO        | 65535    | 65535   | B28DDB4B-8A49-4658-8539-5DA3F20AA39F | 1          |
+| VUF_CODIGO_BOLETO | 65535    | 25693   | 1574                                   | 150        |
+| UND_CODIGO        | 65535    | 30      | FADCA1CC-2E3A-4278-BF58-F44F8D8940C9 | 13920      |
+| FUN_CODIGO        | 65535    | 184     | 1F7A8D46-D0A3-45A6-B4FF-510CDB4E460B | 3475       |
+| VUF_DT            | 65535    | 632     | 2022-04-30                            | 1286       |
+| PRO_CODIGO        | 62788    | 10126   | 08962C5F-8C97-4B24-91BB-F1C564558ABB | 1886       |
+| CAT_CODIGO        | 65535    | 37      | 12FDE7ED-AF3D-4EA5-8250-BBF2D0A5BB90 | 14289      |
+| CLV_BANCO         | 65535    | 2       | CASTING_DB108                          | 37780      |
+
+### Verificando os valores nulos:
+```python
+casting.verificando_valores_nulos(
+    dataframe=df
+)
+```
+
+*Output:*
+| Campo             | Quantidade | Porcentagem |
+|-------------------|------------|-------------|
+| VUF_CODIGO        | 0          | 0.00%       |
+| VUF_CODIGO_BOLETO | 0          | 0.00%       |
+| UND_CODIGO        | 0          | 0.00%       |
+| FUN_CODIGO        | 0          | 0.00%       |
+| VUF_DT            | 0          | 0.00%       |
+| PRO_CODIGO        | 2747       | 4.19%       |
+| CAT_CODIGO        | 0          | 0.00%       |
+| VUF_QTBOLETO      | 0          | 0.00%       |
+| VUF_QTPRODUTO     | 0          | 0.00%       |
+| VUF_VLRBRUTOVENDA | 0          | 0.00%       |
+| VUF_VLRDESCONTO   | 0          | 0.00%       |
+| VUF_VLRLIQFINAL   | 0          | 0.00%       |
+| VUF_VLRTROCA      | 0          | 0.00%       |
+| CLV_BANCO         | 0          | 0.00%       |
 
 
 ## Preparação dos Dados:
