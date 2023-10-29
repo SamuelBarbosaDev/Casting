@@ -121,7 +121,30 @@ class DataVisualization(DataUnderstanding):
         titulo: str = ''
     ):
         sns.lineplot(data=dataframe, x=x, y=y)
+        plt.xticks(rotation=45)
         plt.title(titulo)
+        plt.show()
+
+    def gráfico_linha_plot(
+        self,
+        data: pd.DataFrame,
+        x: str,
+        y: str,
+        figsize: tuple = (10, 6),
+        marker='o',
+        linestyle='-',
+        titulo: str = '',
+        titulo_x: str = '',
+        titulo_y: str = '',
+    ):
+        plt.figure(figsize=figsize)
+        plt.plot(data[x], data[y], marker=marker, linestyle=linestyle)
+        plt.xlabel(titulo_x)
+        plt.ylabel(titulo_y)
+        plt.title(titulo)
+        plt.xticks(rotation=45)
+
+        plt.tight_layout()
         plt.show()
 
 
