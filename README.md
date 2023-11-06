@@ -271,7 +271,7 @@ Temos dados consistentes e utilizamos o Auto-ARIMA para encontrar a melhor confi
 Estamos confiantes de que até o final do projeto seremos capazes de criar um modelo que preverá o faturamento de forma consistente para o `Cliente DB108`.
 
 ### Cliente DB106:
-Enfrentamos um problema sério no DataFrame do `cliente DB106`, no qual há períodos faltantes, especificamente em *['2023-02', '2023-03', '2023-04', '2023-07']*. Uma solução parcial adotada foi a inserção do valor 0 para esses períodos. Vale ressaltar que o DataFrame para este cliente abrange o período de *2022-04* até *2023-09*.
+Enfrentamos um problema sério no DataFrame do `cliente DB106`, no qual há períodos faltantes, especificamente em *['2023-02', '2023-03', '2023-04', '2023-07', '2023-08']*. Uma solução parcial adotada foi a inserção do valor 0 para esses períodos. Vale ressaltar que o DataFrame para este cliente abrange o período de *2022-04* até *2023-09*.
 
 Desenvolvemos um modelo de séries temporais utilizando o Auto-ARIMA, no entanto, estamos enfrentando um **resíduo** significativamente **alto (-44171.069339)**. Essa situação levanta dúvidas quanto à viabilidade de criar um modelo eficaz para prever o faturamento do `Cliente DB106`.
 
