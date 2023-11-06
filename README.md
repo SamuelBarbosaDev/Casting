@@ -17,7 +17,15 @@
   - [Preparação dos Dados:](#preparação-dos-dados)
     - [Segmentando o DataFrame por clientes:](#segmentando-o-dataframe-por-clientes)
   - [Modelagem:](#modelagem)
+    - [Cliente DB108:](#cliente-db108)
+      - [Auto ARIMA:](#auto-arima)
+      - [Train \& Test:](#train--test)
+      - [AIC:](#aic)
+      - [Treinando modelo:](#treinando-modelo)
+      - [Resíduo:](#resíduo)
   - [Avaliação:](#avaliação)
+    - [Cliente DB108:](#cliente-db108-1)
+    - [Cliente DB106:](#cliente-db106)
   - [Implantação:](#implantação)
   - [Pré-requisitos para executar o projeto:](#pré-requisitos-para-executar-o-projeto)
     - [Ambiente virtual e Dependências:](#ambiente-virtual-e-dependências)
@@ -210,10 +218,62 @@ for cliente in set(df['CLV_BANCO']):
 ```
 
 ## Modelagem:
+### Cliente DB108:
+#### Auto ARIMA:
+```python
+model = auto_arima(
+    df,
+)
+```
 
+#### Train & Test:
+```python
+train = df.loc['2022-04-01':'2023-08-01']
+test = df.loc['2023-09-01':]
+```
+
+#### AIC:
+```python
+print(model.aic())
+```
+
+*Output:*
+```output
+543.9449615305956
+```
+
+#### Treinando modelo:
+```python
+model.fit(train)
+```
+
+*Output:*
+```output
+ARIMA(1,0,0)(0,0,0)[0] intercept
+```
+
+#### Resíduo:
+```python
+test - model.predict(n_periods=1)
+```
+
+*Output:*
+```output
+VUF_DT
+2023-09   -16501.730075
+Freq: M, dtype: float64
+```
 
 ## Avaliação:
+### Cliente DB108:
+Temos dados consistentes e utilizamos o Auto-ARIMA para encontrar a melhor configuração para nossa base de dados. Obtivemos resíduos aceitáveis, e além disso, há margem para melhorias. Podemos aprimorar os hiperparâmetros do Auto-ARIMA e, é claro, testar outros modelos, como o `RandomForestRegressor`, o `Prophet`, e ainda explorar modelos de deep learning, como o LSTM do TensorFlow, entre outros.
 
+Estamos confiantes de que até o final do projeto seremos capazes de criar um modelo que preverá o faturamento de forma consistente para o `Cliente DB108`.
+
+### Cliente DB106:
+Enfrentamos um problema sério no DataFrame do `cliente DB106`, no qual há períodos faltantes, especificamente em *['2023-02', '2023-03', '2023-04', '2023-07', '2023-08']*. Uma solução parcial adotada foi a inserção do valor 0 para esses períodos. Vale ressaltar que o DataFrame para este cliente abrange o período de *2022-04* até *2023-09*.
+
+Desenvolvemos um modelo de séries temporais utilizando o Auto-ARIMA, no entanto, estamos enfrentando um **resíduo** significativamente **alto (-44171.069339)**. Essa situação levanta dúvidas quanto à viabilidade de criar um modelo eficaz para prever o faturamento do `Cliente DB106`.
 
 ## Implantação:
 Iniciando a etapa de implementação do modelo em produção.
