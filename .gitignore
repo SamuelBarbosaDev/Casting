@@ -161,7 +161,7 @@ cython_debug/
 
 # Outros:
 data/customers/
-
-DB063_rnn.ipynb
+data/
 model_DB106.ipynb
 model_DB108.ipynb
+
