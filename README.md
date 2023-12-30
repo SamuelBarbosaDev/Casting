@@ -17,15 +17,7 @@
   - [Preparação dos Dados:](#preparação-dos-dados)
     - [Segmentando o DataFrame por clientes:](#segmentando-o-dataframe-por-clientes)
   - [Modelagem:](#modelagem)
-    - [Cliente DB108:](#cliente-db108)
-      - [Auto ARIMA:](#auto-arima)
-      - [Train \& Test:](#train--test)
-      - [AIC:](#aic)
-      - [Treinando modelo:](#treinando-modelo)
-      - [Resíduo:](#resíduo)
   - [Avaliação:](#avaliação)
-    - [Cliente DB108:](#cliente-db108-1)
-    - [Cliente DB106:](#cliente-db106)
   - [Implantação:](#implantação)
   - [Pré-requisitos para executar o projeto:](#pré-requisitos-para-executar-o-projeto)
     - [Ambiente virtual e Dependências:](#ambiente-virtual-e-dependências)
@@ -218,62 +210,35 @@ for cliente in set(df['CLV_BANCO']):
 ```
 
 ## Modelagem:
-### Cliente DB108:
-#### Auto ARIMA:
+Utilizamos o modelo **ARIMA** para realizar a previsão do faturamento líquido dos clientes das soluções Casting. Para uma melhor organização, separamos os notebooks por cliente e por etapa do CRISP-DM (Data Understanding, Data Preparation e Model). Os modelos foram convertidos para o formato pickle e estão armazenados na pasta **models/**. Eles podem ser facilmente utilizados através do seguinte comando em Python:
+
 ```python
-model = auto_arima(
-    df,
-)
+import pickle
+
+
+path = r'models/DB069.pkl'
+
+with open(path, 'rb') as file:
+    model = pickle.load(file)
 ```
 
-#### Train & Test:
+Para realizar uma previsão, basta executar o seguinte comando:
+
 ```python
-train = df.loc['2022-04-01':'2023-08-01']
-test = df.loc['2023-09-01':]
+model.forecast(1)
 ```
 
-#### AIC:
-```python
-print(model.aic())
-```
+Caso deseje aumentar a quantidade de previsões, basta ajustar o número dentro do método **forecast**. No entanto, é importante observar que a primeira previsão é feita com base nos dados reais fornecidos. A partir da segunda previsão, o modelo utiliza dados previamente previstos, o que torna as previsões menos precisas à medida que o número de previsões aumenta.
 
-*Output:*
-```output
-543.9449615305956
-```
+Lembre-se, o modelo deve ser re-treinado com dados atualizados. Recomendo que, a cada fechamento de mês, você o re-treine utilizando os novos dados.
 
-#### Treinando modelo:
-```python
-model.fit(train)
-```
-
-*Output:*
-```output
-ARIMA(1,0,0)(0,0,0)[0] intercept
-```
-
-#### Resíduo:
-```python
-test - model.predict(n_periods=1)
-```
-
-*Output:*
-```output
-VUF_DT
-2023-09   -16501.730075
-Freq: M, dtype: float64
-```
+Algumas observações: inicialmente, recebemos uma quantidade desnecessariamente grande de dados. Uma vez que o objetivo do projeto é prever o faturamento líquido por mês, seria suficiente fornecer os dados já agrupados mensalmente. Tivemos dataframes com mais de 2 milhões de linhas, porém, ao considerarmos os dados realmente relevantes (faturamento líquido agrupado por mês), essas mais de 2 milhões de linhas resultaram em cerca de 20 linhas em média. Apesar de termos dados correspondentes a aproximadamente 1 ano e 9 meses, acredito que seria necessário uma janela temporal maior, de no mínimo 32 meses ou mais, para obtermos um modelo de melhor qualidade.
 
 ## Avaliação:
-### Cliente DB108:
-Temos dados consistentes e utilizamos o Auto-ARIMA para encontrar a melhor configuração para nossa base de dados. Obtivemos resíduos aceitáveis, e além disso, há margem para melhorias. Podemos aprimorar os hiperparâmetros do Auto-ARIMA e, é claro, testar outros modelos, como o `RandomForestRegressor`, o `Prophet`, e ainda explorar modelos de deep learning, como o LSTM do TensorFlow, entre outros.
+Através da criação de modelos de séries temporais, conseguimos alcançar o objetivo de desenvolver um modelo para prever o faturamento líquido mensal. Caso as sugestões levantadas anteriormente sejam implementadas na próxima versão do projeto, poderemos criar um modelo ainda mais aprimorado.
 
-Estamos confiantes de que até o final do projeto seremos capazes de criar um modelo que preverá o faturamento de forma consistente para o `Cliente DB108`.
+Inicialmente, tínhamos a intenção de utilizar uma rede neural como modelo, mas devido a alguns fatores, optamos por empregar o ARIMA. Contudo, em uma futura versão do projeto, consideramos a possibilidade de utilizar um modelo de redes neurais, como evidenciado na amostra presente no arquivo `DB063_rnn.ipynb` dentro da pasta `notebooks/models/`.
 
-### Cliente DB106:
-Enfrentamos um problema sério no DataFrame do `cliente DB106`, no qual há períodos faltantes, especificamente em *['2023-02', '2023-03', '2023-04', '2023-07', '2023-08']*. Uma solução parcial adotada foi a inserção do valor 0 para esses períodos. Vale ressaltar que o DataFrame para este cliente abrange o período de *2022-04* até *2023-09*.
-
-Desenvolvemos um modelo de séries temporais utilizando o Auto-ARIMA, no entanto, estamos enfrentando um **resíduo** significativamente **alto (-44171.069339)**. Essa situação levanta dúvidas quanto à viabilidade de criar um modelo eficaz para prever o faturamento do `Cliente DB106`.
 
 ## Implantação:
 Iniciando a etapa de implementação do modelo em produção.
